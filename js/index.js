@@ -1,9 +1,9 @@
-const userName = "#####";
-const token = "#####";
+const userName = "####";
+const token = "####";
 
 const buildTable = (table, data) => {
   const numRows = 7;
-  const numCols = 52;
+  const numCols = 53;
 
   const daysToPrint = [1, 3, 5];
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
@@ -12,42 +12,31 @@ const buildTable = (table, data) => {
     let tableRow = document.createElement("tr");
     tableRow.className = "table-row";
 
-    // const dayNameParagraph = document.createElement("div");
-    // dayNameParagraph.className = "table-text";
+     const dayNameParagraph = document.createElement("div");
+     dayNameParagraph.className = "table-text";
 
-    // if (daysToPrint.includes(i)) dayNameParagraph.innerText = days[i];
+     if (daysToPrint.includes(i)) dayNameParagraph.innerText = days[i];
 
-    // tableRow.appendChild(dayNameParagraph);
+     tableRow.appendChild(dayNameParagraph);
 
     for (let j = 0; j < numCols; j++) {
-      let tableCell = document.createElement("td");
-      let contributionCount = data[j].contributionDays[i].contributionCount;
-      let contributionClass = contributionCount === 0 ? "" : "lvl4_contrib";
-
-      tableCell.className = `table-element ${contributionClass}`;
-
-      tableRow.appendChild(tableCell);
+      let contributionCount = data[i][j];
+      if (contributionCount !== undefined) {
+        tableRow.appendChild(createCell(contributionCount));
+      }
     }
 
     table.appendChild(tableRow);
   }
-
-  buildFinalWeek(table);
 };
 
-const buildFinalWeek = (table) => {
-  const day = new Date().getDay();
-  const children = table.children;
-
-  for (let i = 0; i < day + 1; i++) {
+const createCell = (contributionCount) => {
     let tableCell = document.createElement("td");
-    tableCell.className = "table-element lvl_contrib_1";
+    tableCell.className = `table-element ${contributionCount ? "lvl4_contrib" : ""}`;
+    return tableCell;
+}
 
-    children[i].appendChild(tableCell);
-  }
-};
-
-const getContributions = async () => {
+const fetchContributionDataFromGithub = async () => {
   const url = "https://api.github.com/graphql";
 
   const queyrString = `query($userName:String!) { 
@@ -84,11 +73,28 @@ const getContributions = async () => {
     .then((res) => res.json());
 };
 
+const graphQLResponseToCountsMatrix = (data) => {
+    const contribs = data.data.user.contributionsCollection.contributionCalendar.weeks;
+
+    let out = [];
+
+    for (let i = 0; i < 7; i++) {
+        out[i] = [];
+        
+        for (let j = 0; j < 53; j++) {
+            out[i][j] = contribs[j]?.contributionDays[i]?.contributionCount;
+        }
+    }
+
+    return out;
+}
+
 window.onload = () => {
   let table = document.getElementById("table");
-  getContributions()
+  fetchContributionDataFromGithub()
   .then(data => {
-    const contribs = data.data.user.contributionsCollection.contributionCalendar.weeks;
-    buildTable(table, contribs);
+    const contributionCountsMatrix = graphQLResponseToCountsMatrix(data);
+    
+    buildTable(table, contributionCountsMatrix);
   });
 };
