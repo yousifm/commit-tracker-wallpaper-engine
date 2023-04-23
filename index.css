@@ -1,77 +1,104 @@
-
 body {
-    background-color: black;
-    background-image: url(img/bg.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+  background-color: black;
+  background-image: url(img/bg.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 #main {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-    height: 100%;
-    color: white;
-    margin: auto;
-    text-align: center;
+  height: 100%;
+  color: white;
+  margin: auto;
+  text-align: center;
 
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 #table {
-    width: 60%;
-    height: 15vh;
+  width: 60%;
+  height: 15vh;
 
-    padding: 2px;
+  padding: 2px;
 
-    background-color: #0d1117;
-    
-    border-radius: 0.5em;
+  background-color: #0d1117;
+
+  border-radius: 0.5em;
 }
 
 .table-row {
-    border-radius: 0.5em;
+  border-radius: 0.5em;
 }
 
 .table-element {
-    display: table-cell;
-    
-    width: 14px;
-    height: 14px;
-    shape-rendering: geometricPrecision;
+  display: table-cell;
 
-    border-radius: 2px;
+  width: 14px;
+  height: 14px;
+  shape-rendering: geometricPrecision;
 
-    background-color: #2d3032;
+  border-radius: 2px;
+
+  background-color: #2d3032;
 }
 
 .table-text {
-    display: table-cell;
-    
-    width: 14px;
+  display: table-cell;
 
-    margin: 0;
+  width: 14px;
 
-    color: white;
-    font-size: 10;
+  margin: 0;
 
-    font-family: "Segoe UI";
-    vertical-align: middle;
+  color: white;
+  font-size: 14;
+
+  font-family: "Segoe UI";
+  vertical-align: middle;
+}
+
+.reload {
+  display: flex;
+  flex-direction: column;
+
+  font-size: 20;
+  color: #24a153;
+  text-decoration: none;
+
+  margin: 25px;
+  width: 25px;
+  height: 25px;
+
+  text-align: center;
+  justify-content: center;
+
+  border-radius: 5px;
+
+  transition: 0.3s;
+}
+
+.reload:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #24a153;
+  opacity: 0.8;
 }
 
 .lvl1_contrib {
-    background-color: #0b3621;
+  background-color: #0b3621;
 }
 
 .lvl2_contrib {
-    background-color: #005728;
+  background-color: #005728;
 }
 
 .lvl3_contrib {
-    background-color: #1e8534;
+  background-color: #1e8534;
 }
 
 .lvl4_contrib {
-    background-color: #24a153;
+  background-color: #24a153;
 }

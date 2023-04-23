@@ -2,6 +2,8 @@ const userName = "####";
 const token = "####";
 
 const buildTable = (table, data) => {
+  table.replaceChildren();
+
   const numRows = 7;
   const numCols = 53;
 
@@ -89,12 +91,24 @@ const graphQLResponseToCountsMatrix = (data) => {
     return out;
 }
 
-window.onload = () => {
-  let table = document.getElementById("table");
+const fetchDataAndBuildTable = () => {
+  let table = document.getElementById("table");  
+  
   fetchContributionDataFromGithub()
   .then(data => {
     const contributionCountsMatrix = graphQLResponseToCountsMatrix(data);
     
     buildTable(table, contributionCountsMatrix);
+  });
+};
+
+window.onload = () => {
+  fetchDataAndBuildTable();
+
+  document.addEventListener('click', function (event) {
+    if (!event.target.matches('.reload')) return;
+    event.preventDefault();
+
+    fetchDataAndBuildTable();
   });
 };
