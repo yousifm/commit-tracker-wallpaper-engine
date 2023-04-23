@@ -1,7 +1,7 @@
 const userName = "####";
 const token = "####";
 
-const buildTable = (table, data) => {
+const buildTable = (table, data, maxContributionCount) => {
   table.replaceChildren();
 
   const numRows = 7;
@@ -24,7 +24,7 @@ const buildTable = (table, data) => {
     for (let j = 0; j < numCols; j++) {
       let contributionCount = data[i][j];
       if (contributionCount !== undefined) {
-        tableRow.appendChild(createCell(contributionCount));
+        tableRow.appendChild(createCell(contributionCount, maxContributionCount));
       }
     }
 
@@ -32,9 +32,12 @@ const buildTable = (table, data) => {
   }
 };
 
-const createCell = (contributionCount) => {
+const createCell = (contributionCount, maxContributionCount) => {
     let tableCell = document.createElement("td");
-    tableCell.className = `table-element ${contributionCount ? "lvl4_contrib" : ""}`;
+    
+    const level = getQuartile(contributionCount, maxContributionCount);
+
+    tableCell.className = `table-element ${contributionCount ? `lvl${level}_contrib` : ""}`;
     return tableCell;
 }
 
@@ -91,15 +94,35 @@ const graphQLResponseToCountsMatrix = (data) => {
     return out;
 }
 
+const findMaximumValueFromMatrix = (contributionCountMatrix) => {
+  let maxCount = 0;
+
+  for (let i = 0; i < 7; i++) {
+    for (let j = 0; j < 53; j++) {
+      let contribCount = contributionCountMatrix[i][j];
+      contribCount = contribCount === undefined ? 0 : contribCount;
+      
+      maxCount = Math.max(contribCount, maxCount);
+    }
+  }
+
+  return maxCount;
+};
+
 const fetchDataAndBuildTable = () => {
   let table = document.getElementById("table");  
   
   fetchContributionDataFromGithub()
   .then(data => {
     const contributionCountsMatrix = graphQLResponseToCountsMatrix(data);
+    const maxContributionCount = findMaximumValueFromMatrix(contributionCountsMatrix);
     
-    buildTable(table, contributionCountsMatrix);
+    buildTable(table, contributionCountsMatrix, maxContributionCount);
   });
+};
+
+const getQuartile = (num, max) => {
+  return Math.round((num / max) * 4);
 };
 
 window.onload = () => {
