@@ -11,3 +11,6 @@ I am currently using it alongside wallpaper engine to display as a desktop wallp
 
 ## How it looks:
 <img src="readme-img/img1.png" alt="demo" width="640"/>;
+
+
+image credits: [!Irinia Iriser](https://www.pexels.com/@iriser/)
